@@ -217,7 +217,11 @@ class Boing(object ):
         self.prune_session_download_records()
         self.prune_session_log_records()
         self.prune_session_recordings()
-        
-if __name__ == '__main__':
+
+
+def main():
     b = Boing()
     b.main()
+        
+if __name__ == '__main__':
+    main()
