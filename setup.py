@@ -44,7 +44,7 @@ setup(name="boing",
       zip_safe=True,
       tests_require=['pytest'],
       cmdclass={'test': PyTest},
-      
+#       package_data      = {'boing': ['boing_schema.sql', 'boing.cfg']},
       # TODO: List of packages that this one depends upon:   
       install_requires=['iso8601', 'tzlocal', 'GeoIP'],
       # TODO: List executable scripts, provided by the package (this is just an example)
