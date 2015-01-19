@@ -1,6 +1,7 @@
 import ConfigParser
 import os
-from os.path import dirname
+import os.path
+# from os.path import dirname
 import sys
 
 class StretchConfig(object):

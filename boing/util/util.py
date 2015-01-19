@@ -47,6 +47,10 @@ def logging_level_from_string(levelstr):
         raise ValueError('Invalid log level: %s' % levelstr)
     return numeric_level
 
+"""
+    Use the information in the app's configuration
+    to set logging options.
+"""
 def configure_logging(loginfo):
     fn=loginfo()['filename']
     levelstr=loginfo()['level']
@@ -58,12 +62,22 @@ def configure_logging(loginfo):
         logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', level=level)
     return logging.getLogger()
 
+"""
+    Generate an archive name
+    based on the passed-in prefix and the current date and time.
+"""
 def generate_archive_name(prefix = None):
     utcnow = datetime.utcnow()
     if prefix is None:
         prefix = ''
     return prefix + utcnow.isoformat() + '.bz2'
 
+"""
+    Given a list of files and an archive file name,
+    create the archive file and add the files from the list.
+    Try to figure out what kind of compression to use
+    based on the archive file extension.
+"""
 def archive_file_list(filename, files):
     comp_mode = ''
     if filename.endswith('bz2'): comp_mode = ':bz2'

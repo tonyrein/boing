@@ -4,12 +4,13 @@
 import GeoIP
 import abc
 import os
-from os.path import isfile
+import os.path
+#from os.path import isfile
 import re
 
-from dto.record import LogRecord, AttemptRecord, SessionLogRecord, SessionDownloadFileRecord
-from dto.record import SessionRecordingRecord
-from sys import exc_info
+from boing.dto.record import LogRecord, AttemptRecord, SessionLogRecord, SessionDownloadFileRecord
+from boing.dto.record import SessionRecordingRecord
+# from sys import exc_info
 
 class StretchFile(object):
     __metaclass__ = abc.ABCMeta
@@ -39,7 +40,7 @@ class AttemptFile(StretchFile):
         super(AttemptFile, self).__init__(file_name)
 
     def load(self):
-        if isfile(self.name()):
+        if os.path.isfile(self.name()):
             try:
                 f = open(self.name(), "rt")
                 try:
@@ -73,7 +74,7 @@ class LogFile(StretchFile):
         super(LogFile, self).__init__(file_name)
         
     def load(self):
-        if isfile(self.name()):
+        if os.path.isfile(self.name()):
             try:
                 f = open(self.name(), "rt")
                 try:
@@ -134,7 +135,7 @@ class SessionLogFile(StretchFile):
 
         
     def load(self):
-        if isfile(self.name()):
+        if os.path.isfile(self.name()):
             try:
                 f = open(self.name(), "rt")
                 try:
@@ -187,7 +188,7 @@ class SessionDownloadFile(StretchFile):
 
         
     def load(self):
-        if isfile(self.name()):
+        if os.path.isfile(self.name()):
             try:
                 with open(self.name(), "rb") as f:
                     data = f.read()
@@ -245,7 +246,7 @@ class SessionRecordingFile(StretchFile):
 
         
     def load(self):
-        if isfile(self.name()):
+        if os.path.isfile(self.name()):
             try:
                 with open(self.name(), "rb") as f:
                     data = f.read()

@@ -1,13 +1,15 @@
 
 import abc
-from genericpath import isfile
-from os import walk, remove, stat, listdir, sep 
-from os.path import join, isdir, islink, realpath
+import os
+import os.path
+#from os import walk, remove, stat, listdir #, sep 
+#from os.path import join, isdir, os.path.islink, realpath
 import re
 import datetime
 import time
 
-from file.stretch_file import AttemptFile, LogFile, SessionLogFile, SessionDownloadFile, SessionRecordingFile
+from boing.file.stretch_file import AttemptFile, LogFile
+from boing.file.stretch_file import  SessionLogFile, SessionDownloadFile, SessionRecordingFile
 
 """
     Base class for objects that keep track of lists of files of one specific
@@ -29,7 +31,7 @@ class FileLister(object):
     @staticmethod
     def is_done(stretch_file_name):
         # return True if there's a file named filespec + '.DONE'
-        return isfile(FileLister.done_name(stretch_file_name)) and not FileLister.is_a_done_marker(stretch_file_name)
+        return os.path.isfile(FileLister.done_name(stretch_file_name)) and not FileLister.is_a_done_marker(stretch_file_name)
     
     """
         Does this file mark another file as "done," or does it
@@ -39,7 +41,7 @@ class FileLister(object):
     @staticmethod
     def is_a_done_marker(name):
         # Is there another file with the same name as this one, minus DONE_EXTENSION?
-        return isfile(name[0:len(name) - len(FileLister.DONE_EXTENSION)]) and name.endswith(FileLister.DONE_EXTENSION) 
+        return os.path.isfile(name[0:len(name) - len(FileLister.DONE_EXTENSION)]) and name.endswith(FileLister.DONE_EXTENSION) 
     
     @staticmethod
     def mark_as_done(stretch_file_object):
@@ -51,7 +53,7 @@ class FileLister(object):
 
     
     def __init__(self, source_dir):
-        if not isdir(source_dir):
+        if not os.path.isdir(source_dir):
             raise ValueError(source_dir + ' is not a directory.')
         else:
             self.source_dir = source_dir
@@ -65,8 +67,8 @@ class FileLister(object):
     """
     def my_directories(self):
         dirlist = [self.source_dir]
-        for (root, dirs, files) in walk(self.source_dir):
-            dirlist += [ join(root,dir) for dir in dirs ]
+        for (root, dirs, files) in os.walk(self.source_dir):
+            dirlist += [ os.path.join(root,dir) for dir in dirs ]
         return dirlist
     
     """
@@ -83,12 +85,12 @@ class FileLister(object):
         self._pending_file_names = []
         self._done_file_names = []
         for dn in self.my_directories():
-            for name in listdir(dn):
+            for name in os.listdir(dn):
                 if not self.one_of_my_files(name): continue
-                whole_path = join(dn, name)
-                if not isfile(whole_path): continue #isfile() returns True for symlinks to files.
-                if islink(whole_path): # If it is a symlink, use the actual file instead.
-                    path_to_add = realpath(whole_path)
+                whole_path = os.path.join(dn, name)
+                if not os.path.isfile(whole_path): continue #isfile() returns True for symlinks to files.
+                if os.path.islink(whole_path): # If it is a symlink, use the actual file instead.
+                    path_to_add = os.path.realpath(whole_path)
                 else:
                     path_to_add = whole_path
                 # Don't process the files that are there merely to mark another file as "done."
@@ -135,7 +137,7 @@ class FileLister(object):
         file_class = self.get_file_class()
         self._pending_file_objects = []
         for name in self._pending_file_names:
-            file_mtime = stat(name).st_mtime
+            file_mtime = os.stat(name).st_mtime
             if file_mtime < self._latest_timestamp_to_process:
                 self._pending_file_objects.append(file_class(name))
             
@@ -143,8 +145,8 @@ class FileLister(object):
         count_removed = 0
         for name in self._done_file_names:
             try:
-                remove(name)
-                remove(self.done_name(name))
+                os.remove(name)
+                os.remove(self.done_name(name))
                 count_removed += 1
             except OSError, e:  ## if failed, report it back to the user ##
                 print "Error: {0} - {1}.".format(e.filename,e.strerror)
@@ -188,7 +190,7 @@ class SessionLogFileLister(FileLister):
         Override my_directories because we don't search recursively for this kind of file
     """
     def my_directories(self):
-        dirs = [ join(self.source_dir, d) for d in listdir(self.source_dir) if isdir(join(self.source_dir, d)) ]
+        dirs = [ os.path.join(self.source_dir, d) for d in os.listdir(self.source_dir) if os.path.isdir(os.path.join(self.source_dir, d)) ]
         return dirs
     
     def get_file_class(self):
@@ -213,7 +215,7 @@ class SessionRecordingFileLister(FileLister):
         Override my_directories because we don't search recursively for this kind of file
     """
     def my_directories(self):
-        dirs = [ join(self.source_dir, d) for d in listdir(self.source_dir) if isdir(join(self.source_dir, d)) ]
+        dirs = [ os.path.join(self.source_dir, d) for d in os.listdir(self.source_dir) if os.path.isdir(os.path.join(self.source_dir, d)) ]
         return dirs
    
 class SessionDownloadFileLister(FileLister):
@@ -231,7 +233,7 @@ class SessionDownloadFileLister(FileLister):
         Override my_directories because we don't search recursively for this kind of file
     """
     def my_directories(self):
-        dirs = [ join(self.source_dir, d, 'downloads') for d in listdir(self.source_dir) if isdir(join(self.source_dir, d, 'downloads')) ]
+        dirs = [ os.path.join(self.source_dir, d, 'downloads') for d in os.listdir(self.source_dir) if os.path.isdir(os.path.join(self.source_dir, d, 'downloads')) ]
         return dirs
 
     """

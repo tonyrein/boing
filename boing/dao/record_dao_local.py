@@ -1,10 +1,10 @@
 import abc
 import sqlite3
-from util.config import StretchConfig
+from boing.util.config import StretchConfig
 import os
 import os.path
 import sys
-from dao.local_db_access import LocalDBAccessor
+from boing.dao.local_db_access import LocalDBAccessor
 
 class RecordDaoLocal(object):
     __metaclass__ = abc.ABCMeta

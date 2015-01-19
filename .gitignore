@@ -4,3 +4,6 @@
 /*.egg-info
 /**/__pycache__/
 *.pyc
+boing.db
+boing.db-journal
+
