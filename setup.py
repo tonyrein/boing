@@ -37,7 +37,7 @@ setup(name="boing",
       keywords="HonSSH Elasticsearch Python Honeypot cybersecurity", # Separate with spaces
       author="Tony Rein",
       author_email="boing.to.elasticsearch@gmail.com",
-      url="https://github.com/tonyrein/boing",
+      url="https://github.com/tonyrein/boing.git",
       license="MIT",
       packages=find_packages(exclude=['examples', 'tests']),
       include_package_data=True,
@@ -50,6 +50,6 @@ setup(name="boing",
       # TODO: List executable scripts, provided by the package (this is just an example)
       entry_points={
         'console_scripts': 
-            ['boing=boing:main']
+            ['boing=boing.main:main']
       }
 )

@@ -36,7 +36,7 @@ class LocalDBAccessor(object):
         name = self._dbconfig['name']
         # Get name of directory holding main.py:
         appdir =  os.path.abspath( os.path.dirname(sys.argv[0]) )
-        data_dir = os.path.joine(appdir, 'data')
+        data_dir = os.path.join(appdir, 'data')
         # If name is a relative path, assume that it's relative to
         # appdir and convert it to an absolute path:
         if not os.path.isabs(name):
