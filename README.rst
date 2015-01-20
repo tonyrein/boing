@@ -78,11 +78,11 @@ you're satisfied that boing is running properly, you'll probably want to set it 
 disk space.)
 
 If the program can't find boing.db in /etc, it will then look in the following locations, in this order:
-* /etc/default
-* /etc/boing
-* /usr/local/share/boin
-* ~/.config/boing/ ("~" means the home directory of the user [probably root] running Boing.)
-* The directory the program was started from
+	* /etc/default
+	* /etc/boing
+	* /usr/local/share/boin
+	* ~/.config/boing/ ("~" means the home directory of the user [probably root] running Boing.)
+	* The directory the program was started from
 
 If you move boing.cfg from /etc, please move it to one of these locations, or edit the file util/config.py,
 one of the library files installed as part of Boing.
