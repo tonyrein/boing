@@ -10,6 +10,11 @@ Licensed under MIT.
 import sys
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
+from setuptools.command.install import install as _install
+from pkg_resources import resource_stream
+import shutil
+
+
 
 # This is a plug-in for setuptools that will invoke py.test
 # when you run python setup.py test
@@ -25,6 +30,23 @@ class PyTest(TestCommand):
 
 
 version = "0.9.1b"
+
+    
+
+
+
+class install(_install):
+    def install_config_file(self):
+        instream = resource_stream('boing', '/data/boing.cfg')
+        outfilename = '/etc/boing.cfg'
+        with open(outfilename, 'wt') as f:
+            shutil.copyfileobj(instream, f)
+
+    def run(self):
+        _install.run(self)
+        print 'Post-install stage...'
+        print 'Copying config file...'
+        self.install_config_file()
 
 setup(name="boing",
       version=version,
@@ -43,7 +65,7 @@ setup(name="boing",
       include_package_data=True,
       zip_safe=True,
       tests_require=['pytest'],
-      cmdclass={'test': PyTest},
+      cmdclass={'test': PyTest, 'install': install},
       package_data      = {'boing': ['data/boing_schema.sql', 'data/boing.cfg']},
       # TODO: List of packages that this one depends upon:   
       install_requires=['iso8601', 'tzlocal', 'GeoIP', 'elasticutils'],

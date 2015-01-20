@@ -34,22 +34,21 @@ class LocalDBAccessor(object):
             create them
     """
     def initialize_database(self):
+        # Where does the user want the database to live?
         name = self._dbconfig['name']
         # turn into an absolute path:
         name = os.path.abspath(name)
-#         # Get name of directory holding main.py:
-#         appdir =  os.path.abspath( os.path.dirname(sys.argv[0]) )
-#         data_dir = os.path.join(appdir, 'data')
-#         # If name is a relative path, assume that it's relative to
-#         # appdir and convert it to an absolute path:
-#         if not os.path.isabs(name):
-#             name = os.path.join(appdir, name)
-#             self._dbconfig['name'] = name
-#         # Ensure that the db directory exists:
-#         dbdir = os.path.dirname(name)
+        # save absolute path back into config so
+        # that other parts of the program can use it.
+        self._dbconfig['name'] = name
+        # If directory for db doesn't already exist,
+        # create it. Use os.makedirs since this does
+        # a recursive, multi-level mkdir if needed.
         dbdir = os.path.dirname(name)
+        print 'will create db file in {}'.format(dbdir)
         if not os.path.isdir(dbdir):
             os.makedirs(dbdir)
+        # Set up db file and tables:
         self.execute_sql_resource('data' + os.sep + 'boing_schema.sql')
     
     
@@ -59,27 +58,7 @@ class LocalDBAccessor(object):
         each statement.
     """
     def execute_sql_resource(self, resource_name):
-#         if not os.path.isfile(filename):
-#             raise ValueError('Invalid filename')
-#         # open the file and read its contents:
         data = resource_string('boing', resource_name)
-        data.replace(os.linesep, '') # strip newlines
-        data = data.strip() # and leading/trailing whitespace
-        commands = data.split(';') # split on SQL end-of-command marker
-        cursor = self.db.cursor()
-        cursor.execute('BEGIN TRANSACTION')
-        for c in commands:
-            cursor.execute(c)
-        cursor.execute('COMMIT')
-
-    
-    def execute_sql_file(self, filename):
-        if not os.path.isfile(filename):
-            raise ValueError('Invalid filename')
-        # open the file and read its contents:
-        data = ''
-        with open(filename, 'rt') as f:
-            data = f.read()
         data.replace(os.linesep, '') # strip newlines
         data = data.strip() # and leading/trailing whitespace
         commands = data.split(';') # split on SQL end-of-command marker
