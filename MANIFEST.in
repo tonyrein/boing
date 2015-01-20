@@ -1,1 +1,1 @@
-include README.rst CHANGELOG.txt LICENSE.txt boing_schema.sql boing.cfg
+include README.rst CHANGELOG.txt LICENSE.txt boing/data/boing_schema.sql boing/data/boing.cfg

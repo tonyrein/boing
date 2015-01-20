@@ -31,10 +31,6 @@ class PyTest(TestCommand):
 
 version = "0.9.1b"
 
-    
-
-
-
 class install(_install):
     def install_config_file(self):
         instream = resource_stream('boing', '/data/boing.cfg')
