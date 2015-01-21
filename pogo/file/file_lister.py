@@ -8,8 +8,8 @@ import re
 import datetime
 import time
 
-from boing.file.stretch_file import AttemptFile, LogFile
-from boing.file.stretch_file import  SessionLogFile, SessionDownloadFile, SessionRecordingFile
+from pogo.file.stretch_file import AttemptFile, LogFile
+from pogo.file.stretch_file import  SessionLogFile, SessionDownloadFile, SessionRecordingFile
 
 """
     Base class for objects that keep track of lists of files of one specific

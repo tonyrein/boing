@@ -8,8 +8,8 @@ import os.path
 #from os.path import isfile
 import re
 
-from boing.dto.record import LogRecord, AttemptRecord, SessionLogRecord, SessionDownloadFileRecord
-from boing.dto.record import SessionRecordingRecord
+from pogo.dto.record import LogRecord, AttemptRecord, SessionLogRecord, SessionDownloadFileRecord
+from pogo.dto.record import SessionRecordingRecord
 # from sys import exc_info
 
 class StretchFile(object):

@@ -1,25 +1,25 @@
 import ConfigParser
 import os
 import os.path
-# from os.path import dirname
 import sys
 
 class StretchConfig(object):
     
     def __init__(self):
-        config_file_search_path = [ '/etc/default/boing.cfg', '/etc/boing/boing.cfg', '/etc/boing.cfg',
-                            '~/.config/boing/boing.cfg', './boing.cfg']
-                # Default settings:
         def_top_dir = '/opt/honssh'
-        def_db_dir = os.path.dirname( os.path.abspath(sys.argv[0]) ) + os.sep + 'db'
+        def_db_dir = '/usr/local/share/pogo/db'
+        config_file_search_path = [ '/etc/pogo.cfg', '/etc/default/pogo.cfg', '/etc/boing/pogo.cfg',
+                        '/usr/local/share/pogo/pogo.cfg',  '~/.config/boing/pogo.cfg', './pogo.cfg']
+
+        # Default settings:
         self._settings = {
-                        'top_dir': def_top_dir,
                         'debug': 0,
                         'locations': {
-                                      'log_dir': '/opt/honssh/logs',
-                                      'session_dir': '/opt/honssh/sessions',
-                                      'attempt_dir': '/opt/honssh/logs',
-                                      'arc_dir': '/opt/honssh/archives'
+                                      'top_dir': def_top_dir,
+                                      'log_dir': def_top_dir + os.sep + 'logs',
+                                      'session_dir': def_top_dir + os.sep + 'sessions',
+                                      'attempt_dir': def_top_dir + os.sep + 'logs',
+                                      'arc_dir': def_top_dir + os.sep + 'archives'
                                       },
                         'elasticsearch': {
                                           'es_host': 'localhost',
@@ -32,7 +32,7 @@ class StretchConfig(object):
                                           'port': '',
                                           'user': '',
                                           'password': '',
-                                          'name': def_db_dir + '/boing.db'
+                                          'name': def_db_dir + os.sep + 'pogo.db'
                                           },
                           'logging': {
                                       'filename': 'CONSOLE',

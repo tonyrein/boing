@@ -1,4 +1,7 @@
-Version 0.1
+Version 0.9.1b
 -----------
 
     - Initial version.
+    2015-01-20:
+    Project name changed to "pogo," since "boing" was already in use in the PyPI.
+    

@@ -1,10 +1,11 @@
 import abc
 import sqlite3
-from boing.util.config import StretchConfig
+
 import os
 import os.path
 import sys
-from boing.dao.local_db_access import LocalDBAccessor
+from pogo.dao.local_db_access import LocalDBAccessor
+from pogo.util.config import StretchConfig
 
 class RecordDaoLocal(object):
     __metaclass__ = abc.ABCMeta
@@ -13,21 +14,12 @@ class RecordDaoLocal(object):
             raise ValueError("RecordDaoLocal object needs a LocalDBAccessor.")
         else:
             self._dba = localdbaccessor
-#             self._cfg = db_cfg
-#             self._db = None
-#             try:
-#                 self.db_open()
-#             except sqlite3.Error as e:  # @UndefinedVariable
-#                 self._db = None
-#                 raise e
-#     
             
         """
         assemble a SQL insert string appropriate for
         this object's class.
         The result will be something like
         "INSERT INTO attempts ( timestamp, bifrozt_host, source_ip ) VALUES ( ?,?,? )"
-        
     """    
     def build_insert_query(self):
         table_name = self.get_table_name()
@@ -78,7 +70,6 @@ class RecordDaoLocal(object):
         sql = self.build_insert_query()
         count_of_written = 0
         try:
-#             self.db_open()
             cursor = self._dba.db.cursor()
             cursor.execute('BEGIN TRANSACTION')
             for r in records:
@@ -99,7 +90,6 @@ class RecordDaoLocal(object):
         sql = "SELECT " + self.get_all_fields() + " FROM " + self.get_table_name()
         if where_clause:
             sql += " WHERE " + where_clause
-#         self.db_open()
         cursor = self._dba.db.cursor()
         cursor.execute(sql)
         return cursor.fetchall()
@@ -125,7 +115,6 @@ class RecordDaoLocal(object):
         if where_clause is not None:
             sql += " WHERE " + where_clause
         try:
-#             self.db_open()
             cursor = self._dba.db.cursor()
             cursor.execute('BEGIN TRANSACTION')
             cursor.execute(sql, new_values)
@@ -141,7 +130,6 @@ class RecordDaoLocal(object):
         sql = "DELETE FROM " + table_name + " WHERE " + where_clause
         count_deleted = 0
         try:
-#             self.db_open()
             cursor = self._dba.db.cursor()
             cursor.execute('BEGIN TRANSACTION')
             cursor.execute(sql)
@@ -259,18 +247,4 @@ class SessionDownloadDaoLocal(RecordDaoLocal):
         return SessionDownloadDaoLocal.INSERT_FIELDS
 
 
-
-
-def main():
-    cfg = StretchConfig()
-    dl = AttemptRecordDaoLocal(cfg.get_db_info())
-    rows = dl.list_all()
-    for row in rows:
-        print row
-        print "Number of records: " + str(len(rows))
-        
-    
-if __name__ == '__main__':
-    main()
-    
 

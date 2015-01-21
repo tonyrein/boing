@@ -7,7 +7,7 @@
 """
 import abc
 import GeoIP
-from boing.util.util import local_timestamp_to_gmt, local_no_tz_to_utc
+from pogo.util.util import local_timestamp_to_gmt, local_no_tz_to_utc
 
 from socket import gethostname
 class Record(object):

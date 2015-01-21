@@ -20,23 +20,23 @@ import logging
 import sys
 import os
 
-from boing.dao.record_dao_es import AttemptRecordDaoES, LogRecordDaoES
-from boing.dao.record_dao_es import SessionLogDaoES, SessionRecordingDaoES, SessionDownloadDaoES
-from boing.dao.record_dao_local import AttemptRecordDaoLocal, LogRecordDaoLocal
-from boing.dao.record_dao_local import SessionLogDaoLocal, SessionRecordingDaoLocal, SessionDownloadDaoLocal
-from boing.dao.local_db_access import LocalDBAccessor
-from boing.dto.record import AttemptRecord, LogRecord
-from boing.dto.record import SessionLogRecord, SessionRecordingRecord, SessionDownloadFileRecord
-from boing.file.file_lister import AttemptFileLister, LogFileLister
-from boing.file.file_lister import SessionLogFileLister, SessionRecordingFileLister, SessionDownloadFileLister
-from boing.service.service_local import ServiceLocal
-from boing.util.config import StretchConfig
-from boing.util.util import logging_level_from_string, configure_logging
-from boing.util.util import generate_archive_name, archive_file_list
+from pogo.dao.record_dao_es import AttemptRecordDaoES, LogRecordDaoES
+from pogo.dao.record_dao_es import SessionLogDaoES, SessionRecordingDaoES, SessionDownloadDaoES
+from pogo.dao.record_dao_local import AttemptRecordDaoLocal, LogRecordDaoLocal
+from pogo.dao.record_dao_local import SessionLogDaoLocal, SessionRecordingDaoLocal, SessionDownloadDaoLocal
+from pogo.dao.local_db_access import LocalDBAccessor
+from pogo.dto.record import AttemptRecord, LogRecord
+from pogo.dto.record import SessionLogRecord, SessionRecordingRecord, SessionDownloadFileRecord
+from pogo.file.file_lister import AttemptFileLister, LogFileLister
+from pogo.file.file_lister import SessionLogFileLister, SessionRecordingFileLister, SessionDownloadFileLister
+from pogo.service.service_local import ServiceLocal
+from pogo.util.config import StretchConfig
+from pogo.util.util import logging_level_from_string, configure_logging
+from pogo.util.util import generate_archive_name, archive_file_list
 import os.path
 
 
-class Boing(object ):
+class Pogo(object ):
     def __init__(self):
         self._cfg = StretchConfig()
         self._logger = configure_logging(self._cfg.get_logging_info)
@@ -46,17 +46,6 @@ class Boing(object ):
         self._arc_dir = self._cfg.get_locations()['arc_dir']
         if not os.path.isdir(self._arc_dir):
             os.makedirs(self._arc_dir)
-        
-#     def configure_logging(self):
-#         fn=self._cfg.get_logging_info()['filename']
-#         levelstr=self._cfg.get_logging_info()['level']
-#         if levelstr == '': levelstr = 'NOTSET'
-#         level = logging_level_from_string(levelstr)
-#         if fn != 'CONSOLE':
-#             logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', filename=fn, level=level)
-#         else:
-#             logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', level=level)
-#         self._logger = logging.getLogger()
         
     def scrape_honssh_files(self, loc_type, lister_class, dao_local_class):
         source_dir = self._cfg.get_locations()[loc_type]
@@ -220,7 +209,7 @@ class Boing(object ):
 
 
 def main():
-    b = Boing()
+    b = Pogo()
     b.main()
         
 if __name__ == '__main__':
