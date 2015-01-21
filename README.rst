@@ -92,17 +92,23 @@ details, see the official Python documentation here: https://docs.python.org/2/l
 
 Here is an explanation of the configuration file contents; the settings below
 are the defaults. 
-'''
+
 [main]
+
 debug=0
 
 debug can be 0 or 1; however, this setting isn't used at present.
 
 [locations]
+
 top_dir=/opt/honssh
+
 log_dir=%(top_dir)s/logs
+
 attempt_dir=%(top_dir)s/logs
+
 session_dir=%(top_dir)s/sessions
+
 archive_dir = %(top_dir)s/archives
 
 The [locations] section specifies where the program should look for the various types
@@ -114,12 +120,19 @@ The locations by default are relative to "top_dir," which is the root of the Hon
 
 
 [db_connection]
+
 type=sqlite
+
 sqlite_dir=/usr/local/share/boing/db
+
 name=%(sqlite_dir)s/boing.db
+
 host=''
+
 port=''
+
 user=''
+
 password=''
 
 The [db_connection] section tells boing how to connect to the database. NOTE: The database
@@ -134,8 +147,11 @@ other than /usr/local/share/boing/db/boing.db, specify it here.
 
 
 [elasticsearch]
+
 es_host=localhost
+
 es_port=9200
+
 es_index=hon_ssh
 
 Change the information in this section to be the hostname or IP address and port of your
@@ -143,8 +159,10 @@ Elasticsearch database, and change the es_index setting if you want to use somet
 other than the default.
 
 [logging]
+
 level=WARNING
+
 filename=/var/log/boing.log
-'''
+
 The default logging level will generate very little output as long as things are going right.
 For more detailed logging, change this to INFO, DEBUG for even more verbose output.
