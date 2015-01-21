@@ -29,7 +29,7 @@ class PyTest(TestCommand):
         sys.exit(pytest.main(self.test_args))
 
 
-version = "0.9.1b"
+version = "0.9.2.1b"
 
 class install(_install):
     def install_config_file(self):
@@ -64,7 +64,7 @@ setup(name="pogo",
       cmdclass={'test': PyTest, 'install': install},
       package_data      = {'pogo': ['data/pogo_schema.sql', 'data/pogo.cfg']},
       # TODO: List of packages that this one depends upon:   
-      install_requires=['iso8601', 'tzlocal', 'GeoIP', 'elasticutils'],
+      install_requires=['iso8601', 'tzlocal', 'GeoIP', 'elasticutils', 'elasticsearch'],
       # TODO: List executable scripts, provided by the package (this is just an example)
       entry_points={
         'console_scripts': 

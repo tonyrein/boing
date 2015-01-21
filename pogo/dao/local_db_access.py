@@ -49,7 +49,7 @@ class LocalDBAccessor(object):
         if not os.path.isdir(dbdir):
             os.makedirs(dbdir)
         # Set up db file and tables:
-        self.execute_sql_resource('data' + os.sep + 'boing_schema.sql')
+        self.execute_sql_resource('data' + os.sep + 'pogo_schema.sql')
     
     
     """
@@ -58,7 +58,7 @@ class LocalDBAccessor(object):
         each statement.
     """
     def execute_sql_resource(self, resource_name):
-        data = resource_string('boing', resource_name)
+        data = resource_string('pogo', resource_name)
         data.replace(os.linesep, '') # strip newlines
         data = data.strip() # and leading/trailing whitespace
         commands = data.split(';') # split on SQL end-of-command marker

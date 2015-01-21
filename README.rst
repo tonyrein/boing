@@ -24,17 +24,28 @@ You must install Pogo separately on each HonSSH host for which you want the data
 below for installation information.) 
 
 
-Note: This README has to be written using `reStructured Text <http://docutils.sourceforge.net/rst.html>`_, otherwise PyPi won't format it properly.
-
 Installation
 ------------
 
-The easiest way to install most Python packages is via ``easy_install`` or ``pip``::
-
-    $ easy_install pogo or pip install pogo
+As of now (late January 2015), Pogo's status is Beta. This means that pip won't install it
+without being told that it's OK. Do this by including "--pre" in the command. So, to
+install Pogo with pip, do (as root):
+    # pip install --pre pogo
     
-You will probably have to do this with "sudo" or as root.
+You may also use easy_install if desired:
+	# easy_install pogo
+	
+However, easy_install does not install the configuration file. I don't know if this is due to
+my package not being set up properly, or is inherent in the way easy_install works, but in any
+case, I don't recommend using easy_install at present to install Pogo. If you do want to use
+easy_install, you can do so, but you'll have to manually create the configuration file and put
+it into one of the directories named below, in the Configuration File section of this document.
 
+To create the default configuration file manually, copy and paste the configuration file section
+of this document, minus the comments. Be sure to check over the file before running the program,
+both to make sure the settings are as you want them, and to remove any formatting codes that
+inadvertently got copies along with the text - the file must be text only.
+    
 The default installation installs:
 	* /usr/local/bin/pogo	- the executable
 	* /etc/pogo.cfg		- the default configuration file

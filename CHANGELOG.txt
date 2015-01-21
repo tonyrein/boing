@@ -5,3 +5,15 @@ Version 0.9.1b
     2015-01-20:
     Project name changed to "pogo," since "boing" was already in use in the PyPI.
     
+Version 0.9.2b
+-----------
+
+	2015-01-20
+	Added elasticsearch to 'install_requires' directive in setup.py
+	
+Version 0.9.2.1b
+-----------
+	Bugfix -- module name "boing" had been retained in local_db_access
+	in initialize_database()
+
+    
