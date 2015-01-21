@@ -1,1 +1,1 @@
-include README.rst CHANGELOG.txt LICENSE.txt pogo/data/pogo_schema.sql pogo/data/pogo.cfg
+include README.rst CHANGELOG.txt LICENSE.txt pogo/data/pogo_schema.sql pogo/data/pogo.cfg pogo/data/logrotate.cfg

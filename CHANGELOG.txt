@@ -13,7 +13,11 @@ Version 0.9.2b
 	
 Version 0.9.2.1b
 -----------
+	2015-01-20
 	Bugfix -- module name "boing" had been retained in local_db_access
 	in initialize_database()
 
-    
+Version 0.9.2.2b
+-----------
+	2015-01-21
+	Added default logrotate configuration

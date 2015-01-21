@@ -37,12 +37,18 @@ class install(_install):
         outfilename = '/etc/pogo.cfg'
         with open(outfilename, 'wt') as f:
             shutil.copyfileobj(instream, f)
+    def install_logrotate_conf(self):
+        instream = resource_stream('pogo', '/data/logrotate.cfg')
+        outfilename = '/etc/logrotate.d/pogo'
+        with open(outfilename, 'wt') as f:
+            shutil.copyfileobj(instream, f)
 
     def run(self):
         _install.run(self)
         print 'Post-install stage...'
         print 'Copying config file...'
         self.install_config_file()
+        self.install_logrotate_conf()
 
 setup(name="pogo",
       version=version,
@@ -62,7 +68,7 @@ setup(name="pogo",
       zip_safe=True,
       tests_require=['pytest'],
       cmdclass={'test': PyTest, 'install': install},
-      package_data      = {'pogo': ['data/pogo_schema.sql', 'data/pogo.cfg']},
+      package_data      = {'pogo': ['data/pogo_schema.sql', 'data/pogo.cfg', 'data/logrotate.cfg']},
       # TODO: List of packages that this one depends upon:   
       install_requires=['iso8601', 'tzlocal', 'GeoIP', 'elasticutils', 'elasticsearch'],
       # TODO: List executable scripts, provided by the package (this is just an example)

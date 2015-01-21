@@ -28,31 +28,36 @@ Installation
 ------------
 
 As of now (late January 2015), Pogo's status is Beta. This means that pip won't install it
-without being told that it's OK. Do this by including "--pre" in the command. So, to
+unless you add "--pre" to the command to tell it that a pre-release version is OK. So, to
 install Pogo with pip, do (as root):
+
     # pip install --pre pogo
     
-You may also use easy_install if desired:
-	# easy_install pogo
-	
-However, easy_install does not install the configuration file. I don't know if this is due to
-my package not being set up properly, or is inherent in the way easy_install works, but in any
-case, I don't recommend using easy_install at present to install Pogo. If you do want to use
-easy_install, you can do so, but you'll have to manually create the configuration file and put
-it into one of the directories named below, in the Configuration File section of this document.
-
-To create the default configuration file manually, copy and paste the configuration file section
-of this document, minus the comments. Be sure to check over the file before running the program,
-both to make sure the settings are as you want them, and to remove any formatting codes that
-inadvertently got copies along with the text - the file must be text only.
+You may also use easy_install if desired, but this isn't recommended. I've found that installing
+Pogo with easy_install doesn't install the configuration file, so if you do this you'll have
+to create the configuration file manually. I don't know if this is due to my package not being
+set up properly, or is inherent in the way easy_install works, but in any case, for now just
+use pip.
     
 The default installation installs:
-	* /usr/local/bin/pogo	- the executable
-	* /etc/pogo.cfg		- the default configuration file
+	* /usr/local/bin/pogo				- the executable
+	* /etc/pogo.cfg						- the default configuration file
+	* /etc/logrotate.d/pogo				- the default logrotate configuration
 	* /usr/local/lib/python-2.7/dist-packages/pogo 	- the Python libraries
-	* /usr/local/lib/python-2.7/dist-packages/pogo-<VERSION>.egg-info -- metadata about the package
+	* /usr/local/lib/python-2.7/dist-packages/pogo-<VERSION>.egg-info - metadata about the package
 
 If you want to install to different locations, see the help pages for pip or easy_install.
+
+After running the pip installation command:
+
+	* Make changes to pogo.cfg as needed or desired.
+
+	* If needed or desired, move pogo.cfg to another directory. If the directory is not
+	in the list given in the COnfiguration File section of this document, edit
+	util/config.py as appropriate.
+	
+	* Make changes to the logrotate configuration file if needed or desired. 
+
 
 Usage
 -----
