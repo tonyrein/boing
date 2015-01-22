@@ -45,3 +45,9 @@ Version 0.9.3.3b
 -----------
 	2015-01-22
 	* Squashed bug in util.PogoGeoIP.__init__()
+	
+Version 0.9.3.4b
+-----------
+	2015-01-22
+	* Modified util.get_geo_info() and util.PogoGeoIP to handle failure
+	of geolite2.lookup() gracefully.

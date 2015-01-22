@@ -90,32 +90,39 @@ def archive_file_list(filename, files):
 
 
 class PogoGeoInfo(object):
-    def __init__(self, ipi): # ipi is a geoip.IPInfo
-        self._ipi = ipi
-        self._info_dict = ipi.get_info_dict()
-        # several pieces of data in _info_dict are used almost
-        # every time this class is used, so save them in an
-        # easily-accessible place:
-        # Other items are still accessible by dereferencing _info_dict.
-        if not self._info_dict['country']:
+    def __init__(self, ipi=None): # ipi is a geoip.IPInfo
+        if ipi is None:
             self.country_name = ''
             self.country_code = ''
         else:
-            if self._info_dict['country']['names'] and self._info_dict['country']['names']['en']:
-                self.country_name = self._info_dict['country']['names']['en']
-            else:
+            self._info_dict = ipi.get_info_dict()
+            # several pieces of data in _info_dict are used almost
+            # every time this class is used, so save them in an
+            # easily-accessible place:
+            # Other items are still accessible by dereferencing _info_dict.
+            if not self._info_dict['country']:
                 self.country_name = ''
-            if self._info_dict['country']['iso_code']:
-                self.country_code = self._info_dict['country']['iso_code']
-            else:
                 self.country_code = ''
+            else:
+                if self._info_dict['country']['names'] and self._info_dict['country']['names']['en']:
+                    self.country_name = self._info_dict['country']['names']['en']
+                else:
+                    self.country_name = ''
+                if self._info_dict['country']['iso_code']:
+                    self.country_code = self._info_dict['country']['iso_code']
+                else:
+                    self.country_code = ''
 
 """
     Return an object holding information about
-    location of given ip address
+    location of given ip address. If no ip address
+    is given, instantiate a PgooGeoInfo object with None,
+    which will set country_code and country_name to ''.
 """
 def get_geo_info(ipaddress):
-    if not ipaddress: raise ValueError('get_geo_info() called with null ip address')
-    return PogoGeoInfo(geolite2.lookup(ipaddress))
+    if not ipaddress:
+        return PogoGeoInfo()
+    else:
+        return PogoGeoInfo(geolite2.lookup(ipaddress))
     
      
