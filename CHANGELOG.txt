@@ -29,3 +29,8 @@ Version 0.9.3.0b
 	in order to simplify installation.
 	* Minor changes in setup.py.
 	* Removed obsolete comment blocks.
+	
+Version 0.9.3.1b
+-----------
+	2015-01-22
+	* Removed stray references to GeoIP (old geo information library no longer used)

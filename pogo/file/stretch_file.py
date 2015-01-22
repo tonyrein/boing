@@ -125,7 +125,7 @@ class SessionLogFile(StretchFile):
             self.source_ip = source_ip
             gpi = get_geo_info(self.source_ip)
             self.country_code = gpi.country_code
-            self.country_name = gpi.country_name#             geoip = GeoIP.new(GeoIP.GEOIP_MEMORY_CACHE)
+            self.country_name = gpi.country_name
         else:
             self.source_ip = ''
             self.country_code = ''

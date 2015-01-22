@@ -6,7 +6,6 @@
     "documents" in the ElasticSearch database.
 """
 import abc
-import GeoIP
 from pogo.util.util import local_timestamp_to_gmt, local_no_tz_to_utc, get_geo_info
 
 from socket import gethostname
