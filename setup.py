@@ -70,7 +70,8 @@ setup(name="pogo",
       cmdclass={'test': PyTest, 'install': install},
       package_data      = {'pogo': ['data/pogo_schema.sql', 'data/pogo.cfg', 'data/logrotate.cfg']},
       # TODO: List of packages that this one depends upon:   
-      install_requires=['iso8601', 'tzlocal', 'GeoIP', 'elasticutils', 'elasticsearch'],
+#       install_requires=['iso8601', 'tzlocal', 'GeoIP', 'elasticutils', 'elasticsearch'],
+      install_requires=['iso8601', 'tzlocal', 'python-geoip', 'python-geoip-geolite2', 'elasticutils', 'elasticsearch'],
       # TODO: List executable scripts, provided by the package (this is just an example)
       entry_points={
         'console_scripts': 

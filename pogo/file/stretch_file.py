@@ -10,6 +10,7 @@ import re
 
 from pogo.dto.record import LogRecord, AttemptRecord, SessionLogRecord, SessionDownloadFileRecord
 from pogo.dto.record import SessionRecordingRecord
+from pogo.util.util import get_geo_info
 # from sys import exc_info
 
 class StretchFile(object):
@@ -123,11 +124,14 @@ class SessionLogFile(StretchFile):
     def set_source_ip(self, source_ip):
         if source_ip:
             self.source_ip = source_ip
-            geoip = GeoIP.new(GeoIP.GEOIP_MEMORY_CACHE)
-            self.country_name = geoip.country_name_by_addr(self.source_ip)
-            self.country_code = geoip.country_code_by_addr(self.source_ip)
-            if self.country_code is None: self.country_code = ''
-            if self.country_name is None: self.country_name = ''
+            gpi = get_geo_info(self.source_ip)
+            self.country_name = gpi.country_name
+            self.country_code = gpi.country_code
+#             geoip = GeoIP.new(GeoIP.GEOIP_MEMORY_CACHE)
+#             self.country_name = geoip.country_name_by_addr(self.source_ip)
+#             self.country_code = geoip.country_code_by_addr(self.source_ip)
+#             if self.country_code is None: self.country_code = ''
+#             if self.country_name is None: self.country_name = ''
         else:
             self.source_ip = ''
             self.country_code = ''
@@ -234,11 +238,14 @@ class SessionRecordingFile(StretchFile):
     def set_source_ip(self, source_ip):
         if source_ip:
             self.source_ip = source_ip
-            geoip = GeoIP.new(GeoIP.GEOIP_MEMORY_CACHE)
-            self.country_name = geoip.country_name_by_addr(self.source_ip)
-            self.country_code = geoip.country_code_by_addr(self.source_ip)
-            if self.country_code is None: self.country_code = ''
-            if self.country_name is None: self.country_name = ''
+            gpi = get_geo_info(self.source_ip)
+            self.country_code = gpi.country_code
+            self.country_name = gpi.country_name
+#             geoip = GeoIP.new(GeoIP.GEOIP_MEMORY_CACHE)
+#             self.country_name = geoip.country_name_by_addr(self.source_ip)
+#             self.country_code = geoip.country_code_by_addr(self.source_ip)
+#             if self.country_code is None: self.country_code = ''
+#             if self.country_name is None: self.country_name = ''
         else:
             self.source_ip = ''
             self.country_code = ''
