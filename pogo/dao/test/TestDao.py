@@ -6,12 +6,13 @@ Created on Jan 13, 2015
 import unittest
 import sqlite3
 
-from dao.record_dao_local import AttemptRecordDaoLocal, LogRecordDaoLocal
-from dao.record_dao_local import SessionDownloadDaoLocal, SessionLogDaoLocal, SessionRecordingDaoLocal
+from pogo.dao.record_dao_local import AttemptRecordDaoLocal, LogRecordDaoLocal
+from pogo.dao.record_dao_local import SessionDownloadDaoLocal, SessionLogDaoLocal, SessionRecordingDaoLocal
 
-from util.config import StretchConfig
-from dto.record import AttemptRecord
-import GeoIP
+from pogo.util.config import StretchConfig
+from pogo.util.util import get_geo_info
+from pogo.dto.record import AttemptRecord
+
 
 class TestDaoLocal(unittest.TestCase):
 
@@ -75,11 +76,9 @@ class TestDaoLocal(unittest.TestCase):
         r.user = 'donaldduck'
         r.password = 'secret'
         r.success = '0'
-        geoip = GeoIP.new(GeoIP.GEOIP_MEMORY_CACHE)
-        r.country_name = geoip.country_name_by_addr(r.source_ip)
-        r.country_code = geoip.country_code_by_addr(r.source_ip)
-        if r.country_code is None: r.country_code = ''
-        if r.country_name is None: r.country_name = ''
+        pgi = get_geo_info(r.source_ip)
+        r.country_code = pgi.country_code
+        r.country_name = pgi.country_name
         daolocal.insert_single(r)
         list_where = daolocal.list_where("es_id = ''")
         self.assertEqual(len(list_where), 1, "select did not return correct number of items")

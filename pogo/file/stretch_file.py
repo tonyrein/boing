@@ -1,11 +1,9 @@
 """
     A StretchFile reads disk files into RAM and creates Record objects from their contents.
 """
-import GeoIP
 import abc
 import os
 import os.path
-#from os.path import isfile
 import re
 
 from pogo.dto.record import LogRecord, AttemptRecord, SessionLogRecord, SessionDownloadFileRecord
