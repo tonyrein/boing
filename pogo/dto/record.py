@@ -7,7 +7,7 @@
 """
 import abc
 import GeoIP
-from pogo.util.util import local_timestamp_to_gmt, local_no_tz_to_utc
+from pogo.util.util import local_timestamp_to_gmt, local_no_tz_to_utc, get_geo_info
 
 from socket import gethostname
 class Record(object):
@@ -51,12 +51,15 @@ class AttemptRecord(Record):
             self.password = unicode(splitList[3], errors='replace')
             self.success = splitList[4]
             if not self.success: self.success = '0'
+            gpi = get_geo_info(self.source_ip)
+            self.country_code = gpi.country_code
+            self.country_name = gpi.country_name
             # Make a GeoIP object - should cache this for efficiency
-            geoip = GeoIP.new(GeoIP.GEOIP_MEMORY_CACHE)
-            self.country_name = geoip.country_name_by_addr(self.source_ip)
-            self.country_code = geoip.country_code_by_addr(self.source_ip)
-            if self.country_code is None: self.country_code = ''
-            if self.country_name is None: self.country_name = ''
+#             geoip = GeoIP.new(GeoIP.GEOIP_MEMORY_CACHE)
+#             self.country_name = geoip.country_name_by_addr(self.source_ip)
+#             self.country_code = geoip.country_code_by_addr(self.source_ip)
+#             if self.country_code is None: self.country_code = ''
+#             if self.country_name is None: self.country_name = ''
         else:
             # initialize fields to empty strings or null values:
             self.timestamp = ''

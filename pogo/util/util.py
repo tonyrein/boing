@@ -2,6 +2,7 @@ import iso8601
 import time
 from datetime import datetime
 from tzlocal import get_localzone
+from geoip import geolite2
 import logging
 import os.path
 import sqlite3
@@ -86,4 +87,35 @@ def archive_file_list(filename, files):
     with tarfile.open(filename, open_mode_string) as tf:
         for fn in files:
             tf.add(fn)
+
+
+class PogoGeoInfo(object):
+    def __init__(self, ipi): # ipi is a geoip.IPInfo
+        self._ipi = ipi
+        self._info_dict = ipi.get_info_dict()
+        # several pieces of data in _info_dict are used almost
+        # every time this class is used, so save them in an
+        # easily-accessible place:
+        # Other items are still accessible by dereferencing _info_dict.
+        if not _info_dict['country']:
+            self.country_name = ''
+            self.country_code = ''
+        else:
+            if _info_dict['country']['names'] and _info_dict['country']['names']['en']:
+                self.country_name = _info_dict['country']['names']['en']
+            else:
+                self.country_name = ''
+            if _info_dict['country']['iso_code']:
+                self.country_code = _info_dict['country']['iso_code']
+            else:
+                self.country_code = ''
+
+"""
+    Return an object holding information about
+    location of given ip address
+"""
+def get_geo_info(ipaddress):
+    if not ipaddress: raise ValueError('get_geo_info() called with null ip address')
+    return PogoGeoInfo(geolite2.lookup(ipaddress))
     
+     
