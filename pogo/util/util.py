@@ -97,16 +97,16 @@ class PogoGeoInfo(object):
         # every time this class is used, so save them in an
         # easily-accessible place:
         # Other items are still accessible by dereferencing _info_dict.
-        if not _info_dict['country']:
+        if not self._info_dict['country']:
             self.country_name = ''
             self.country_code = ''
         else:
-            if _info_dict['country']['names'] and _info_dict['country']['names']['en']:
-                self.country_name = _info_dict['country']['names']['en']
+            if self._info_dict['country']['names'] and self._info_dict['country']['names']['en']:
+                self.country_name = self._info_dict['country']['names']['en']
             else:
                 self.country_name = ''
-            if _info_dict['country']['iso_code']:
-                self.country_code = _info_dict['country']['iso_code']
+            if self._info_dict['country']['iso_code']:
+                self.country_code = self._info_dict['country']['iso_code']
             else:
                 self.country_code = ''
 

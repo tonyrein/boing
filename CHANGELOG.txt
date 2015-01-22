@@ -35,8 +35,13 @@ Version 0.9.3.1b
 	2015-01-22
 	* Removed stray references to GeoIP (old geo information library no longer used)
 	
-Version 0.9.3.1b
+Version 0.9.3.2b
 -----------
 	2015-01-22
 	* Removed one more import GeoIP statement from stretch_file.py
 	* Modified TestDao.py to use util.get_geo_info()
+
+Version 0.9.3.3b
+-----------
+	2015-01-22
+	* Squashed bug in util.PogoGeoIP.__init__()
