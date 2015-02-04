@@ -8,8 +8,8 @@ class StretchConfig(object):
     def __init__(self):
         def_top_dir = '/opt/honssh'
         def_db_dir = '/usr/local/share/pogo/db'
-        config_file_search_path = [ '/etc/pogo.cfg', '/etc/default/pogo.cfg', '/etc/boing/pogo.cfg',
-                        '/usr/local/share/pogo/pogo.cfg',  '~/.config/boing/pogo.cfg', './pogo.cfg']
+        config_file_search_path = [ '/etc/pogo.cfg', '/etc/default/pogo.cfg', '/etc/pogo/pogo.cfg',
+                        '/usr/local/share/pogo/pogo.cfg',  '~/.config/pogo/pogo.cfg', './pogo.cfg']
 
         # Default settings:
         self._settings = {
@@ -55,8 +55,6 @@ class StretchConfig(object):
             if cfg.has_section(section):
                 for item in cfg.items(section):
                     self._settings[section][item[0]] = item[1]
-#         
-            
 
     def __str__(self, *args, **kwargs):
         retStr = 'StretchConfig: \n\tDebug: ' + str(self._settings['debug']) + '\n'
