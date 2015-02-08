@@ -19,12 +19,13 @@ class RecordDaoES(object):
             self._es_index = es_cfg['es_index']
             self._es_host = es_cfg['es_host']
             self._es_port = es_cfg['es_port']
-            
+            self._es_timeout = es_cfg['es_timeout']
+            if not self._es_timeout: self._es_timeout = 30
             # Open the connection to the ES server and make sure our index exists
             es_url = 'http://' + self._es_host
             if self._es_port:
                 es_url += ':' + self._es_port
-            self._es_connection = get_es(urls=[es_url])
+            self._es_connection = get_es(urls=[es_url], timeout=self._es_timeout)
             if not self._es_connection:
                 raise Exception("Could not initialize ElasticSearch connection.")
 
@@ -46,22 +47,22 @@ class RecordDaoES(object):
             self._es_connection.indices.put_mapping(self.get_document_type(),
                  {'properties': self.get_mapping() }, self._es_index)
 
-        
+
     def insert_single(self, record):
         d = record.as_dict()
         t = self.get_document_type()
         idx = self._es_index
         r = self._es_connection.index(index=idx, doc_type=t, body=d)
         return r['_id']
-    
+
     abc.abstractmethod
     def get_document_type(self):
         return ''
-    
+
     abc.abstractmethod
     def get_mapping(self):
         return ''
-    
+
 
 class AttemptRecordDaoES(RecordDaoES):
     DOCUMENT_TYPE = 'HonSSH_Attempt'
@@ -75,16 +76,16 @@ class AttemptRecordDaoES(RecordDaoES):
         "password": {"type": "string", "index": "not_analyzed"},
         "success": {"type": "boolean"}
     }
-    
+
     def __init__(self, es_cfg):
         super(AttemptRecordDaoES, self).__init__(es_cfg)
-        
+
     def get_document_type(self):
         return AttemptRecordDaoES.DOCUMENT_TYPE
-    
+
     def get_mapping(self):
         return AttemptRecordDaoES.MAPPING
-        
+
 
 
 class LogRecordDaoES(RecordDaoES):
@@ -95,17 +96,17 @@ class LogRecordDaoES(RecordDaoES):
            "server_info": {"type": "string", "index": "not_analyzed"},
            "message": {"type": "string"}
            }
-    
+
     def __init__(self, es_cfg):
         super(LogRecordDaoES, self).__init__(es_cfg)
 
 
     def get_document_type(self):
         return LogRecordDaoES.DOCUMENT_TYPE
-    
+
     def get_mapping(self):
         return LogRecordDaoES.MAPPING
-    
+
 class SessionLogDaoES(RecordDaoES):
     DOCUMENT_TYPE = 'HonSSH_SessionLogEntry'
     MAPPING = {
@@ -123,7 +124,7 @@ class SessionLogDaoES(RecordDaoES):
 
     def get_document_type(self):
         return SessionLogDaoES.DOCUMENT_TYPE
-    
+
     def get_mapping(self):
         return SessionLogDaoES.MAPPING
 
@@ -139,13 +140,13 @@ class SessionRecordingDaoES(RecordDaoES):
        "filename": {"type": "string", "index": "not_analyzed"},
        "contents": {"type": "string", "index": "no"}
        }
-    
+
     def __init__(self, es_cfg):
         super(SessionRecordingDaoES, self).__init__(es_cfg)
 
     def get_document_type(self):
         return SessionRecordingDaoES.DOCUMENT_TYPE
-    
+
     def get_mapping(self):
         return SessionRecordingDaoES.MAPPING
 
@@ -161,16 +162,16 @@ class SessionDownloadDaoES(RecordDaoES):
        "filename": {"type": "string", "index": "not_analyzed"},
        "contents": {"type": "string", "index": "no"}
        }
-    
+
     def __init__(self, es_cfg):
         super(SessionDownloadDaoES, self).__init__(es_cfg)
 
     def get_document_type(self):
         return SessionDownloadDaoES.DOCUMENT_TYPE
-    
+
     def get_mapping(self):
         return SessionDownloadDaoES.MAPPING
 
 
 
-    
+
