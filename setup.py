@@ -29,7 +29,7 @@ class PyTest(TestCommand):
         sys.exit(pytest.main(self.test_args))
 
 
-version = "0.9.3.5"
+version = "0.9.3.7"
 
 class install(_install):
     def install_config_file(self):
@@ -75,9 +75,16 @@ setup(name="pogo",
       zip_safe=True,
       tests_require=['pytest'],
       cmdclass={'test': PyTest, 'install': install},
+      # package_data files are:
+      #		* pogo_schema.sql to initialize the app's "staging" database
+      #		* pogo.cfg, a default configuration file
+      #		* logrotate.cfg, a default control file for logrotate
+      #
       package_data = {'pogo': ['data/pogo_schema.sql', 'data/pogo.cfg', 'data/logrotate.cfg']},
-      install_requires=['iso8601', 'tzlocal', 'python-geoip', 'python-geoip-geolite2', 'elasticutils', 'elasticsearch'],
-      # TODO: List executable scripts, provided by the package (this is just an example)
+      install_requires=['iso8601', 'tzlocal', 'python-geoip-geolite2', 'elasticsearch'],
+
+      # The entry_points entry results in an executable script called 'pogo'
+      # in the PATH, which invokes the main() method in the 'main' module.
       entry_points={
         'console_scripts':
             ['pogo=pogo.main:main']

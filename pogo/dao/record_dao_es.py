@@ -3,7 +3,8 @@
     the ElasticSearch database on the log server.
 """
 import abc
-from elasticutils import get_es
+#from elasticutils import get_es
+from elasticsearch import Elasticsearch
 
 class RecordDaoES(object):
     __metaclass__ = abc.ABCMeta
@@ -21,19 +22,17 @@ class RecordDaoES(object):
             self._es_port = es_cfg['es_port']
             self._es_timeout = es_cfg['es_timeout']
             if not self._es_timeout: self._es_timeout = 30
-            # Open the connection to the ES server and make sure our index exists
-            es_url = 'http://' + self._es_host
-            if self._es_port:
-                es_url += ':' + self._es_port
-            self._es_connection = get_es(urls=[es_url], timeout=self._es_timeout)
-            if not self._es_connection:
-                raise Exception("Could not initialize ElasticSearch connection.")
+			# needed to work around problems in some versions of urllib3:
+            port_num = int(self._es_port)
+            timeout_num = float(self._es_timeout)
+            es = Elasticsearch( [ {'host': self._es_host, 'port': port_num, 'timeout': timeout_num } ] )
+            if not es: raise Exception("Could not initialize Elasticsearch connection.")
+            self._es_connection = es
 
     def _assure_index(self):
         # Make sure our index exists:
         if not self._es_connection.indices.exists(index=self._es_index):
             self._es_connection.indices.create(index=self._es_index)
-
 
     def _assure_mapping(self):
         # Verify our mapping exists.
@@ -46,7 +45,6 @@ class RecordDaoES(object):
             ):
             self._es_connection.indices.put_mapping(self.get_document_type(),
                  {'properties': self.get_mapping() }, self._es_index)
-
 
     def insert_single(self, record):
         d = record.as_dict()
@@ -85,7 +83,6 @@ class AttemptRecordDaoES(RecordDaoES):
 
     def get_mapping(self):
         return AttemptRecordDaoES.MAPPING
-
 
 
 class LogRecordDaoES(RecordDaoES):
