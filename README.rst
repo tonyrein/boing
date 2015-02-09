@@ -170,9 +170,11 @@ es_port=9200
 
 es_index=hon_ssh
 
-Change the information in this section to be the hostname or IP address and port of your
-Elasticsearch database, and change the es_index setting if you want to use something
-other than the default.
+es_timeout=30
+
+Change the information in this section to the values for your Elasticsearch database.
+These values should work as is for a server on the same host as Pogo, unless the
+default settings have been changed in Elasticsearch's configuration.
 
 [logging]
 
