@@ -3,7 +3,6 @@
     the ElasticSearch database on the log server.
 """
 import abc
-#from elasticutils import get_es
 from elasticsearch import Elasticsearch
 
 class RecordDaoES(object):

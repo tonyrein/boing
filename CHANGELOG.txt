@@ -76,6 +76,13 @@ Version 0.9.3.7
 	use in the Elasticsearch() constructor call!
 	* Removed unused modules 'python-geoip' and 'elasticutils' from
 	setup.py's install_requires. Now using 'python-geoip-geolite2'
-	and 'elasticutils' instead.
+	and 'elasticsearch' instead.
 	* Updated README.rst - added es_timeout parameter to config description.
+
+Version 0.9.3.8
+-----------
+	2015-02-09
+	* I may have finally fixed the formatting of the parameters in
+	the call to Elasticsearch() in record_dao_es.py.
+	* Removed obsolete call to import elasticutils in record_dao_es.py
 	
