@@ -86,3 +86,8 @@ Version 0.9.3.8
 	the call to Elasticsearch() in record_dao_es.py.
 	* Removed obsolete call to import elasticutils in record_dao_es.py
 	
+Version 0.9.3.9
+	2015-02-11
+	* Modified record.py to allow passing a field separator to RecordAttempt.__init__(),
+	and added logic to handle proper parsing of passwords containing the field separator.
+	

@@ -9,6 +9,7 @@ import abc
 from pogo.util.util import local_timestamp_to_gmt, local_no_tz_to_utc, get_geo_info
 
 from socket import gethostname
+from pyes.orm.queryset import FIELD_SEPARATOR
 class Record(object):
     def __init__(self):
         __metaclass__ = abc.ABCMeta
@@ -28,28 +29,47 @@ class Record(object):
     # end of base class
     
 class AttemptRecord(Record):
-    def __init__(self, logLine=None):
+    def __init__(self, log_line=None, field_sep=None):
         super( AttemptRecord, self ).__init__()
+        
         
         # If we were passed a string, use that to
         # initialize ourself:
-        if logLine is not None:
-            splitList = logLine.split(',')
+        if log_line is not None:
+            # If we have a log_line, see if we have a field seperator
+            # as well. If not, use the default.
+            if field_sep is not None:
+                self._field_sep = field_sep
+            else:
+                self._field_sep = ','
+            
+            splitList = log_line.split(self._field_sep)
             # if < 5 elements in splitList, append '' to bring length to 5
-            while (len(splitList) < 5):
+            while len(splitList) < 5:
                 splitList.append('')
-            timestring = splitList[0]
+            
+            # Now convert list elements to Unicode strings:
+            u_list = [ unicode(s, errors='replace') for s in splitList ]
+            # Now extract the fields. Start with the success/failure
+            # flag, because that simplifies the password logic later:
+            self.success = u_list.pop()
+            if not self.success: self.success = '0'
+            # Now work from the beginning of u_list:
+            timestring = u_list[0]
             # We know that timestring is in Eastern time, but
             # don't know if daylight savings time was in effect or
             # not. Use local_no_tz_to_utc() to convert to UTC.
             self.timestamp = local_no_tz_to_utc(timestring)
-            self.source_ip = splitList[1]
+            self.source_ip = u_list[1]
             # Try to protect against invalid chars
             # in user-entered values:
-            self.user = unicode(splitList[2], errors='replace')
-            self.password = unicode(splitList[3], errors='replace')
-            self.success = splitList[4]
-            if not self.success: self.success = '0'
+            self.user = u_list[2]
+            # The password is whatever's left. If the password logged by HonSSH
+            # contained the field separator character, the "split(self._field_sep)
+            # call will have divided it into more than one element of u_list.
+            # Therefore, in that case we have to re-assemble it:
+            self.password = self._field_sep.join(u_list[3:])
+
             gpi = get_geo_info(self.source_ip)
             self.country_code = gpi.country_code
             self.country_name = gpi.country_name
