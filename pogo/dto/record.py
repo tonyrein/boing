@@ -9,7 +9,6 @@ import abc
 from pogo.util.util import local_timestamp_to_gmt, local_no_tz_to_utc, get_geo_info
 
 from socket import gethostname
-from pyes.orm.queryset import FIELD_SEPARATOR
 class Record(object):
     def __init__(self):
         __metaclass__ = abc.ABCMeta
