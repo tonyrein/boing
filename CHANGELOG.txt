@@ -91,3 +91,6 @@ Version 0.9.3.9
 	* Modified record.py to allow passing a field separator to RecordAttempt.__init__(),
 	and added logic to handle proper parsing of passwords containing the field separator.
 	
+Version 0.9.4.0
+	2015-03-03
+	* Corrected bug caused by inconsistency between 'arc_dir' and 'archive_dir' in configuration file

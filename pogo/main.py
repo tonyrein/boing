@@ -43,7 +43,7 @@ class Pogo(object ):
         self._dba = LocalDBAccessor(self._cfg.get_db_info())
         self._dba.initialize_database()
         # Create directory to store archived data files, if it doesn't already exist:
-        self._arc_dir = self._cfg.get_locations()['arc_dir']
+        self._arc_dir = self._cfg.get_locations()['archive_dir']
         if not os.path.isdir(self._arc_dir):
             os.makedirs(self._arc_dir)
         

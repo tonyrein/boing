@@ -19,7 +19,7 @@ class StretchConfig(object):
                                       'log_dir': def_top_dir + os.sep + 'logs',
                                       'session_dir': def_top_dir + os.sep + 'sessions',
                                       'attempt_dir': def_top_dir + os.sep + 'logs',
-                                      'arc_dir': def_top_dir + os.sep + 'archives'
+                                      'archive_dir': def_top_dir + os.sep + 'archives'
                                       },
                         'elasticsearch': {
                                           'es_host': 'localhost',
