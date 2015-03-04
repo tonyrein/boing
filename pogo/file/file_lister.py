@@ -50,11 +50,12 @@ class FileLister(object):
 
 
 
-    def __init__(self, source_dir):
+    def __init__(self, source_dir, honssh_type):
         if not os.path.isdir(source_dir):
             raise ValueError(source_dir + ' is not a directory.')
         else:
             self.source_dir = source_dir
+            self._honssh_type = honssh_type
             self._pending_file_names = []
             self._done_file_names = []
             self._pending_file_objects = []
@@ -136,7 +137,7 @@ class FileLister(object):
         self._pending_file_objects = []
         for name in self._pending_file_names:
             file_mtime = os.stat(name).st_mtime
-            if file_mtime < self._latest_timestamp_to_process:
+            if file_mtime < self._latest_timestamp_tooption_process:
                 self._pending_file_objects.append(file_class(name))
 
     def delete_done_files(self):
@@ -155,8 +156,8 @@ class AttemptFileLister(FileLister):
 
     FILESPEC_PATTERN=re.compile('^\d{8}$')
 
-    def __init__(self, source_dir):
-        super( AttemptFileLister, self ).__init__(source_dir)
+    def __init__(self, source_dir, honssh_type):
+        super( AttemptFileLister, self ).__init__(source_dir, honssh_type)
 
     def get_file_class(self):
         return AttemptFile
@@ -168,8 +169,8 @@ class AttemptFileLister(FileLister):
 class LogFileLister(FileLister):
     FILESPEC_PATTERN = re.compile('^honssh\.log.*')
 
-    def __init__(self, source_dir):
-        super( LogFileLister, self ).__init__(source_dir)
+    def __init__(self, source_dir, honssh_type):
+        super( LogFileLister, self ).__init__(source_dir, honssh_type)
 
     def get_file_class(self):
         return LogFile
@@ -181,14 +182,45 @@ class LogFileLister(FileLister):
 
 class SessionLogFileLister(FileLister):
     FILESPEC_PATTERN = re.compile('.*\.log') # This regex pattern will stop working in 3000 AD!
-    def __init__(self, source_dir):
-        super( SessionLogFileLister, self ).__init__(source_dir)
+    def __init__(self, source_dir, honssh_type):
+        super( SessionLogFileLister, self ).__init__(source_dir, honssh_type)
 
     """
-        Override my_directories because we don't search recursively for this kind of file
+        Override my_directories because we don't search recursively for this kind of file.
+        
+        Session directory structure for multi version of HonSSH is as follows:
+        source_dir/
+            workstation name/
+                source ip/
+                    file1.log,
+                    file1_TERMINALID.tty,
+                    file2.log,
+                    file2TERMINALID.tty,
+                    etc.
+                    downloads/
+                    
+        For example:
+            /opt/honssh/sessions/Workstation_02_A/172.11.211.123/20150303_1322232.log,
+            /opt/honssh/sessions/Workstation_02_A/172.11.211.123/20150303_202749_991_TERM0.tty
+            /opt/honssh/sessions/Workstation_02_A/172.11.211.123/downloads/
+                    
     """
+    
     def my_directories(self):
+        if self._honssh_type == 'SINGLE':
+            return self.my_directories_single()
+        else:
+            return self.my_directories_multi()
+    
+    def my_directories_single(self):
         dirs = [ os.path.join(self.source_dir, d) for d in os.listdir(self.source_dir) if os.path.isdir(os.path.join(self.source_dir, d)) ]
+        return dirs
+    
+    def my_directories_multi(self):
+        workstation_dirs = [ os.path.join(self.source_dir, d) for d in os.listdir(self.source_dir) if os.path.isdir(os.path.join(self.source_dir, d)) ]
+        dirs = []
+        for w in workstation_dirs:
+            dirs += [ os.path.join(w,d) for d in os.listdir(w) if os.path.isdir(os.path.join(w,d))]
         return dirs
 
     def get_file_class(self):
@@ -200,8 +232,8 @@ class SessionLogFileLister(FileLister):
 
 class SessionRecordingFileLister(FileLister):
     FILESPEC_PATTERN = re.compile('.*\.tty')
-    def __init__(self, source_dir):
-        super( SessionRecordingFileLister, self ).__init__(source_dir)
+    def __init__(self, source_dir, honssh_type):
+        super( SessionRecordingFileLister, self ).__init__(source_dir, honssh_type)
 
     def get_file_class(self):
         return SessionRecordingFile
@@ -209,17 +241,60 @@ class SessionRecordingFileLister(FileLister):
     def get_filespec_pattern(self):
         return SessionRecordingFileLister.FILESPEC_PATTERN
 
+
     """
-        Override my_directories because we don't search recursively for this kind of file
+        Override my_directories because we don't search recursively for this kind of file.
+        
+        Session directory structure for multi version of HonSSH is as follows:
+        source_dir/
+            workstation name/
+                source ip/
+                    file1.log,
+                    file1_TERMINALID.tty,
+                    file2.log,
+                    file2TERMINALID.tty,
+                    etc.
+                    downloads/
+                    
+        For example:
+            /opt/honssh/sessions/Workstation_02_A/172.11.211.123/20150303_1322232.log,
+            /opt/honssh/sessions/Workstation_02_A/172.11.211.123/20150303_202749_991_TERM0.tty
+            /opt/honssh/sessions/Workstation_02_A/172.11.211.123/downloads/
+                    
     """
+
     def my_directories(self):
+        if self._honssh_type == 'SINGLE':
+            return self.my_directories_single()
+        else:
+            return self.my_directories_multi()
+    
+    def my_directories_single(self):
         dirs = [ os.path.join(self.source_dir, d) for d in os.listdir(self.source_dir) if os.path.isdir(os.path.join(self.source_dir, d)) ]
         return dirs
+    
+    def my_directories_multi(self):
+        workstation_dirs = [ os.path.join(self.source_dir, d) for d in os.listdir(self.source_dir) if os.path.isdir(os.path.join(self.source_dir, d)) ]
+        dirs = []
+        for w in workstation_dirs:
+            dirs += [ os.path.join(w,d) for d in os.listdir(w) if os.path.isdir(os.path.join(w,d))]
+        return dirs
+
+
+
+#     """
+#         Override my_directories because we don't search recursively for this kind of file
+#     """
+#     def my_directories(self):
+#         dirs = [ os.path.join(self.source_dir, d) for d in os.listdir(self.source_dir) if os.path.isdir(os.path.join(self.source_dir, d)) ]
+#         return dirs
+
+    
 
 class SessionDownloadFileLister(FileLister):
     FILESPEC_PATTERN = None # This pattern is not relevant for htis class
-    def __init__(self, source_dir):
-        super( SessionDownloadFileLister, self ).__init__(source_dir)
+    def __init__(self, source_dir, honssh_type):
+        super( SessionDownloadFileLister, self ).__init__(source_dir, honssh_type)
 
     def get_file_class(self):
         return SessionDownloadFile
@@ -227,12 +302,60 @@ class SessionDownloadFileLister(FileLister):
     def get_filespec_pattern(self):
         return SessionDownloadFileLister.FILESPEC_PATTERN
 
+#     """
+#         Override my_directories because we don't search recursively for this kind of file
+#     """
+#     def my_directories(self):
+#         dirs = [ os.path.join(self.source_dir, d, 'downloads') for d in os.listdir(self.source_dir) if os.path.isdir(os.path.join(self.source_dir, d, 'downloads')) ]
+#         return dirs
+
     """
-        Override my_directories because we don't search recursively for this kind of file
+        Override my_directories because we don't search recursively for this kind of file.
+        
+        Session directory structure for multi version of HonSSH is as follows:
+        source_dir/
+            workstation name/
+                source ip/
+                    file1.log,
+                    file1_TERMINALID.tty,
+                    file2.log,
+                    file2TERMINALID.tty,
+                    etc.
+                    downloads/
+                    
+        For example:
+            /opt/honssh/sessions/Workstation_02_A/172.11.211.123/20150303_1322232.log,
+            /opt/honssh/sessions/Workstation_02_A/172.11.211.123/20150303_202749_991_TERM0.tty
+            /opt/honssh/sessions/Workstation_02_A/172.11.211.123/downloads/
+                    
     """
+    
     def my_directories(self):
-        dirs = [ os.path.join(self.source_dir, d, 'downloads') for d in os.listdir(self.source_dir) if os.path.isdir(os.path.join(self.source_dir, d, 'downloads')) ]
+        if self._honssh_type == 'SINGLE':
+            return self.my_directories_single()
+        else:
+            return self.my_directories_multi()
+
+
+
+    
+    def my_directories_single(self):
+        dirs = [ os.path.join(self.source_dir, d, 'downloads') for d in os.listdir(self.source_dir)
+                 if os.path.isdir(os.path.join(self.source_dir, d, 'downloads')) ]
         return dirs
+
+        
+        
+    def my_directories_multi(self):
+        workstation_dirs = [ os.path.join(self.source_dir, d) for d in os.listdir(self.source_dir)
+                             if os.path.isdir(os.path.join(self.source_dir, d)) ]
+        dirs = []
+        for w in workstation_dirs:
+            dirs += [ os.path.join(w,d, 'downloads') for d in os.listdir(w)
+                      if os.path.isdir(os.path.join(w,d, 'downloads'))]
+        return dirs
+
+
 
     """
         Override this for this class -- these file names can be any file name

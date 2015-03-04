@@ -14,6 +14,7 @@ class StretchConfig(object):
         # Default settings:
         self._settings = {
                         'debug': 0,
+                        'honssh_type': 'SINGLE',
                         'locations': {
                                       'top_dir': def_top_dir,
                                       'log_dir': def_top_dir + os.sep + 'logs',
@@ -47,9 +48,11 @@ class StretchConfig(object):
         
         # If we found a config file, override
         # defaults with values from config file:
-        # special case for debug, since it's a boolean (rest are strings)
+        # special case for debug and honssh_type; others
+        # handled by looping over sections.
         if cfg.has_section('main'):
             self._settings['debug'] = cfg.getboolean('main', 'debug')
+            self._settings['honssh_type'] = cfg.get('main', 'honssh_type')
   
         for section in ('locations', 'db_connection', 'elasticsearch', 'logging'):
             if cfg.has_section(section):
@@ -75,6 +78,9 @@ class StretchConfig(object):
     
     def get_logging_info(self):
         return self._settings['logging']
+    
+    def get_honssh_type(self):
+        return self._settings['honssh_type']
             
 
 if __name__ == '__main__':

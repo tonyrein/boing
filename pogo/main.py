@@ -20,19 +20,36 @@ import logging
 import sys
 import os
 
-from pogo.dao.record_dao_es import AttemptRecordDaoES, LogRecordDaoES
-from pogo.dao.record_dao_es import SessionLogDaoES, SessionRecordingDaoES, SessionDownloadDaoES
-from pogo.dao.record_dao_local import AttemptRecordDaoLocal, LogRecordDaoLocal
-from pogo.dao.record_dao_local import SessionLogDaoLocal, SessionRecordingDaoLocal, SessionDownloadDaoLocal
-from pogo.dao.local_db_access import LocalDBAccessor
-from pogo.dto.record import AttemptRecord, LogRecord
-from pogo.dto.record import SessionLogRecord, SessionRecordingRecord, SessionDownloadFileRecord
-from pogo.file.file_lister import AttemptFileLister, LogFileLister
-from pogo.file.file_lister import SessionLogFileLister, SessionRecordingFileLister, SessionDownloadFileLister
-from pogo.service.service_local import ServiceLocal
-from pogo.util.config import StretchConfig
-from pogo.util.util import logging_level_from_string, configure_logging
-from pogo.util.util import generate_archive_name, archive_file_list
+# from pogo.dao.record_dao_es import AttemptRecordDaoES, LogRecordDaoES
+# from pogo.dao.record_dao_es import SessionLogDaoES, SessionRecordingDaoES, SessionDownloadDaoES
+# from pogo.dao.record_dao_local import AttemptRecordDaoLocal, LogRecordDaoLocal
+# from pogo.dao.record_dao_local import SessionLogDaoLocal, SessionRecordingDaoLocal, SessionDownloadDaoLocal
+# from pogo.dao.local_db_access import LocalDBAccessor
+# from pogo.dto.record import AttemptRecord, LogRecord
+# from pogo.dto.record import SessionLogRecord, SessionRecordingRecord, SessionDownloadFileRecord
+# from pogo.file.file_lister import AttemptFileLister, LogFileLister
+# from pogo.file.file_lister import SessionLogFileLister, SessionRecordingFileLister, SessionDownloadFileLister
+# from pogo.service.service_local import ServiceLocal
+# from pogo.util.config import StretchConfig
+# from pogo.util.util import logging_level_from_string, configure_logging
+# from pogo.util.util import generate_archive_name, archive_file_list
+
+from dao.record_dao_es import AttemptRecordDaoES, LogRecordDaoES
+from dao.record_dao_es import SessionLogDaoES, SessionRecordingDaoES, SessionDownloadDaoES
+from dao.record_dao_local import AttemptRecordDaoLocal, LogRecordDaoLocal
+from dao.record_dao_local import SessionLogDaoLocal, SessionRecordingDaoLocal, SessionDownloadDaoLocal
+from dao.local_db_access import LocalDBAccessor
+from dto.record import AttemptRecord, LogRecord
+from dto.record import SessionLogRecord, SessionRecordingRecord, SessionDownloadFileRecord
+from file.file_lister import AttemptFileLister, LogFileLister
+from file.file_lister import SessionLogFileLister, SessionRecordingFileLister, SessionDownloadFileLister
+from service.service_local import ServiceLocal
+from util.config import StretchConfig
+from util.util import logging_level_from_string, configure_logging
+from util.util import generate_archive_name, archive_file_list
+
+
+
 import os.path
 
 
@@ -49,7 +66,8 @@ class Pogo(object ):
         
     def scrape_honssh_files(self, loc_type, lister_class, dao_local_class):
         source_dir = self._cfg.get_locations()[loc_type]
-        lister = lister_class(source_dir)
+        honssh_type = self._cfg.get_honssh_type()
+        lister = lister_class(source_dir, honssh-type)
         lister.load_file_name_lists()
         lister.load_pending_file_objects()
         self._logger.info("File lister loaded with %s files", len(lister))
@@ -92,7 +110,7 @@ class Pogo(object ):
     
     def put_records_into_es(self, localdaoclass, esclass, recordclass):
             db_local = localdaoclass(self._dba)
-            aservice = ServiceLocal(db_local)
+            aservice = ServiceLocal(db_optionlocal)
             es_link = esclass(self._cfg.get_es_info())
             rows = aservice.get_non_processed()
             total_to_add = len(rows)
@@ -141,7 +159,11 @@ class Pogo(object ):
     
     def prune_honssh_records(self, loc_type, lister_class, dao_local_class):
         source_dir = self._cfg.get_locations()[loc_type]
-        lister = lister_class(source_dir)
+        honssh_type = self._cfg.get_honssh_type()
+        lister = lister_class(source_dir, honssh-type)
+        #source_dir = self._cfg.get_locations()[loc_type]
+        #lister = lister_class(source_dir)
+#         lister = lister_class(self._cfg, loc_type)
         lister.load_file_name_lists()
         self._logger.info("Found %s files to prune", len(lister._done_file_names) )
         print "Found {0} files to prune".format(len(lister._done_file_names))
