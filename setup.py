@@ -29,7 +29,7 @@ class PyTest(TestCommand):
         sys.exit(pytest.main(self.test_args))
 
 
-version = "0.9.5.0"
+version = "0.9.5.1"
 
 class install(_install):
     def install_config_file(self):

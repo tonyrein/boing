@@ -98,4 +98,8 @@ Version 0.9.4.0
 Version 0.9.5.0
 	2015-03-04
 	* Added configuration options and code to handle development versions of HonSSH which work
-	with multiple honeypots. Minor changes to README. 
+	with multiple honeypots. Minor changes to README.
+	
+Version 0.9.5.1
+	2015-03-05
+	* 'honssh_version' parameter in default config file corrected to 'honssh_type'
