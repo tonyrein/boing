@@ -27,7 +27,7 @@ below for installation information.)
 Installation
 ------------
 
-As of now (late January 2015), Pogo's status is Beta. This means that pip won't install it
+As of now (early March 2015), Pogo's status is Beta. This means that pip won't install it
 unless you add "--pre" to the command to tell it that a pre-release version is OK. So, to
 install Pogo with pip, do (as root):
 
@@ -52,9 +52,7 @@ After running the pip installation command:
 
 	* Make changes to pogo.cfg as needed or desired.
 
-	* If needed or desired, move pogo.cfg to another directory. If the directory is not
-	in the list given in the COnfiguration File section of this document, edit
-	util/config.py as appropriate.
+	* If needed or desired, move pogo.cfg to another directory. If the directory is not	in the list given in the COnfiguration File section of this document, edit 	util/config.py as appropriate.
 	
 	* Make changes to the logrotate configuration file if needed or desired. 
 
@@ -113,7 +111,11 @@ are the defaults.
 
 debug=0
 
+honssh_type = 'SINGLE'
+
 debug can be 0 or 1; however, this setting isn't used at present.
+
+Pogo can work with development versions of HonSSH that handle multiple honeypots. If you are using such a version, change the honssh_type from 'SINGLE' to 'MULTI.'
 
 [locations]
 
@@ -174,7 +176,8 @@ es_timeout=30
 
 Change the information in this section to the values for your Elasticsearch database.
 These values should work as is for a server on the same host as Pogo, unless the
-default settings have been changed in Elasticsearch's configuration.
+default settings have been changed in Elasticsearch's configuration. By the way, the timeout
+parameter is in seconds.
 
 [logging]
 
