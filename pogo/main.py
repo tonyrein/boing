@@ -67,7 +67,7 @@ class Pogo(object ):
     def scrape_honssh_files(self, loc_type, lister_class, dao_local_class):
         source_dir = self._cfg.get_locations()[loc_type]
         honssh_type = self._cfg.get_honssh_type()
-        lister = lister_class(source_dir, honssh-type)
+        lister = lister_class(source_dir, honssh_type)
         lister.load_file_name_lists()
         lister.load_pending_file_objects()
         self._logger.info("File lister loaded with %s files", len(lister))
@@ -110,7 +110,7 @@ class Pogo(object ):
     
     def put_records_into_es(self, localdaoclass, esclass, recordclass):
             db_local = localdaoclass(self._dba)
-            aservice = ServiceLocal(db_optionlocal)
+            aservice = ServiceLocal(db_local)
             es_link = esclass(self._cfg.get_es_info())
             rows = aservice.get_non_processed()
             total_to_add = len(rows)
@@ -160,7 +160,7 @@ class Pogo(object ):
     def prune_honssh_records(self, loc_type, lister_class, dao_local_class):
         source_dir = self._cfg.get_locations()[loc_type]
         honssh_type = self._cfg.get_honssh_type()
-        lister = lister_class(source_dir, honssh-type)
+        lister = lister_class(source_dir, honssh_type)
         #source_dir = self._cfg.get_locations()[loc_type]
         #lister = lister_class(source_dir)
 #         lister = lister_class(self._cfg, loc_type)

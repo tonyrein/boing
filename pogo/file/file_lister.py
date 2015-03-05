@@ -137,7 +137,7 @@ class FileLister(object):
         self._pending_file_objects = []
         for name in self._pending_file_names:
             file_mtime = os.stat(name).st_mtime
-            if file_mtime < self._latest_timestamp_tooption_process:
+            if file_mtime < self._latest_timestamp_to_process:
                 self._pending_file_objects.append(file_class(name))
 
     def delete_done_files(self):
