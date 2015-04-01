@@ -9,6 +9,7 @@ import abc
 from pogo.util.util import local_timestamp_to_gmt, local_no_tz_to_utc, get_geo_info
 
 from socket import gethostname
+from _sqlite3 import Row
 class Record(object):
     def __init__(self):
         __metaclass__ = abc.ABCMeta
@@ -254,7 +255,24 @@ class SessionDownloadFileRecord(SessionRecord):
         return adict   
 
 
-
+# LoginRecord added 2015-0401. It is needed because
+# HonSSH does not create a session recording unless the
+# intruder actually executes some commands. Therefore, for the
+# vast majority of cases where a logged-in intruder disconnects
+# without actually doing anything, it is difficult to figure
+# out how long they stay logged in. This class is designed to
+# track that.
+#
+class LoginRecord(Record):
+    # row is assumed to be a dict, probably retrieved
+    # by a database call.
+    def __init__(self, row=None):
+        super( LoginRecord, self ).__init__()
+        if row is None:
+            self.values = {}
+        else:
+            self.values = row
+            
 
 """
     While the Log and Attempt record types are collections of strings, a Session is
