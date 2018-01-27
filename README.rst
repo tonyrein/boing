@@ -52,7 +52,7 @@ After running the pip installation command:
 
 	* Make changes to pogo.cfg as needed or desired.
 
-	* If needed or desired, move pogo.cfg to another directory. If the directory is not	in the list given in the COnfiguration File section of this document, edit 	util/config.py as appropriate.
+	* If needed or desired, move pogo.cfg to another directory. If the directory is not	in the list given in the Configuration File section of this document, edit 	util/config.py as appropriate.
 	
 	* Make changes to the logrotate configuration file if needed or desired. 
 
